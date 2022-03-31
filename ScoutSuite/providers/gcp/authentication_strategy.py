@@ -3,13 +3,14 @@ import os
 import warnings
 
 from google import auth
+from google.oauth2.credentials import Credentials
 
 from ScoutSuite.providers.base.authentication_strategy import AuthenticationStrategy, AuthenticationException
 
 
 class GCPAuthenticationStrategy(AuthenticationStrategy):
 
-    def authenticate(self, user_account=None, service_account=None, **kwargs):
+    def authenticate(self, user_account=None, service_account=None, access_token=None, **kwargs):
         """
         Implements authentication for the GCP provider
         Refer to https://google-auth.readthedocs.io/en/stable/reference/google.auth.html.
@@ -26,19 +27,24 @@ class GCPAuthenticationStrategy(AuthenticationStrategy):
             if user_account:
                 # disable GCP warning about using User Accounts
                 warnings.filterwarnings("ignore", "Your application has authenticated using end user credentials")
+                credentials, default_project_id = auth.default()
             elif service_account:
                 client_secrets_path = os.path.abspath(service_account)
                 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = client_secrets_path
+                credentials, default_project_id = auth.default()
+            elif access_token:
+                credentials, default_project_id = (Credentials(token=access_token), None)
             else:
                 raise AuthenticationException('Failed to authenticate to GCP - no supported account type')
 
-            credentials, default_project_id = auth.default()
 
             if not credentials:
                 raise AuthenticationException('No credentials')
 
             credentials.is_service_account = service_account is not None
             credentials.default_project_id = default_project_id
+
+            print(credentials.__dict__)
 
             return credentials
 

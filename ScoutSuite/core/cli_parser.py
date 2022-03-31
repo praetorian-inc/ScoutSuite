@@ -110,6 +110,13 @@ class ScoutSuiteArgumentParser:
                                     metavar="KEY_FILE",
                                     help='Run Scout with a Google Service Account with the specified '
                                          'Google Service Account Application Credentials file')
+        
+        gcp_auth_modes.add_argument('-a',
+                                    '--access-token',
+                                    action='store',
+                                    metavar="ACCESS_TOKEN",
+                                    help='Run Scout with a Google Account with the provided '
+                                         'valid and temporary access token')
 
         gcp_scope = parser.add_argument_group('Additional arguments')
 

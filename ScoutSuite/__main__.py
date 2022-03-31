@@ -49,6 +49,7 @@ def run_from_cli():
                    tenant_id=args.get('tenant_id'),
                    subscription_ids=args.get('subscription_ids'), all_subscriptions=args.get('all_subscriptions'),
                    # GCP
+                   access_token=args.get('access_token'),
                    project_id=args.get('project_id'), folder_id=args.get('folder_id'),
                    organization_id=args.get('organization_id'), all_projects=args.get('all_projects'),
                    # Aliyun
@@ -95,7 +96,7 @@ def run(provider,
         tenant_id=None,
         subscription_ids=None, all_subscriptions=None,
         # GCP
-        service_account=None,
+        service_account=None, access_token=None,
         project_id=None, folder_id=None, organization_id=None, all_projects=False,
         # Aliyun
         access_key_id=None, access_key_secret=None,
@@ -147,7 +148,7 @@ async def _run(provider,
                client_id, client_secret,
                username, password,
                # GCP
-               service_account,
+               service_account, access_token,
                project_id, folder_id, organization_id, all_projects,
                # Aliyun
                access_key_id, access_key_secret,
@@ -189,6 +190,7 @@ async def _run(provider,
                                                  user_account=user_account,
                                                  user_account_browser=user_account_browser,
                                                  service_account=service_account,
+                                                 access_token=access_token,
                                                  cli=cli,
                                                  msi=msi,
                                                  service_principal=service_principal,
